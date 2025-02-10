@@ -1,0 +1,10 @@
+JFK Airport, 940
+Heathrow Airport, 5567.8
+Charles de Gaulle, 342.5
+Frankfurt Airport, 469.3
+Dubai International, 4846.2
+Singapore Changi, 5842.1
+Hong Kong International, 2583.7
+Tokyo Narita, 2964.9
+Sydney Kingsford Smith, 791.4
+Los Angeles International, 0.0
