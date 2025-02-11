@@ -45,12 +45,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/visaRequired"
+                android:id="@+id/stopTime"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="Visa Required: "
+                android:text="Time: "
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +58,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/visaRequired"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Visa Required: "
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

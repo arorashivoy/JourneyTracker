@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-data class Stop(val stop: String, val distance: Double?, val visaRequired: Boolean = false)
+data class Stop(val stop: String, val distance: Double?, val time: Double?, val visaRequired: Boolean = false)
 class MainActivity : AppCompatActivity() {
     private lateinit var stopTextView: TextView
     private lateinit var distanceTextView: TextView
+    private lateinit var timeTextView: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var nextStopButton: Button
     private lateinit var unitToggleButton: Button
@@ -26,7 +27,9 @@ class MainActivity : AppCompatActivity() {
     private var stops: List<Stop> = listOf()
     private var currentStopIndex = 0
     private var totalDistance = 0.0
+    private var totalTime = 0.0
     private var distanceCovered = 0.0
+    private var timeCovered = 0.0
     private var isKm = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         stopTextView = findViewById(R.id.stopTextView)
         distanceTextView = findViewById(R.id.distanceTextView)
+        timeTextView = findViewById(R.id.timeTextView)
         progressBar = findViewById(R.id.progressBar)
         nextStopButton = findViewById(R.id.nextStopButton)
         unitToggleButton = findViewById(R.id.unitToggleButton)
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         stops = loadStopsFromResource(resources)
         totalDistance = calculateTotalDistance()
+        totalTime = calculateTotalTime()
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = StopsAdapter(stops, isKm)
@@ -55,8 +60,9 @@ class MainActivity : AppCompatActivity() {
 
         nextStopButton.setOnClickListener {
             if (currentStopIndex < stops.size - 1) {
-                distanceCovered += stops[currentStopIndex].distance ?: 0.0
                 currentStopIndex++
+                distanceCovered += stops[currentStopIndex].distance ?: 0.0
+                timeCovered += stops[currentStopIndex].time ?: 0.0
                 updateUI()
             }
         }
@@ -71,25 +77,37 @@ class MainActivity : AppCompatActivity() {
         return try {
             val inputStream = resources.openRawResource(R.raw.stops)
             val reader = BufferedReader(InputStreamReader(inputStream))
-            reader.readLines().map { Stop(it.split(",")[0].trim(), it.split(",")[1].trim().toDoubleOrNull(),
-                it.split(",")[2].trim() == "YES"
-            ) }
-
+            reader.readLines().map {
+                val parts = it.split(",").map { it.trim() }
+                Stop(
+                    stop = parts[0],
+                    distance = parts.getOrNull(1)?.toDoubleOrNull(),
+                    time = parts.getOrNull(2)?.toDoubleOrNull(),
+                    visaRequired = parts.getOrNull(3)?.equals("YES", ignoreCase = true) == true
+                )
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            listOf(Stop("Unknown", 0.0))
+            listOf(Stop("Unknown", 0.0, 0.0, false))
         }
     }
+
     private fun calculateTotalDistance(): Double {
         return stops.sumOf { it.distance ?: 0.0 }
     }
 
+    private fun calculateTotalTime(): Double {
+        return stops.sumOf { it.time ?: 0.0 }
+    }
+
     private fun updateUI() {
         stopTextView.text = "Current Stop: ${stops[currentStopIndex].stop}"
+        val remainingTime = totalTime - timeCovered
         val remainingDistance = totalDistance - distanceCovered
         val displayDistance = if (isKm) remainingDistance else remainingDistance * 0.621371
         val unit = if (isKm) "km" else "miles"
         distanceTextView.text = "Remaining Distance: %.2f %s".format(displayDistance, unit)
+        timeTextView.text = "Remaining Time: %.2f hrs".format(remainingTime)
         progressBar.progress = ((distanceCovered / totalDistance) * 100).toInt()
         recyclerView.adapter = StopsAdapter(stops.subList(currentStopIndex + 1, stops.size), isKm)
     }

@@ -16,10 +16,12 @@ class StopsAdapter(private val stops: List<Stop>, private val isKm: Boolean) : R
     override fun onBindViewHolder(holder: StopViewHolder, position: Int) {
         val visaRequired = if (stops[position].visaRequired) "Yes" else "No"
         val distance = if (isKm) stops[position].distance ?: 0.0 else stops[position].distance?.times(0.621371) ?: 0.0
+        val time = stops[position].time ?: 0.0
         val unit = if (isKm) "km" else "miles"
 
         holder.stopText.text = stops[position].stop
         holder.distanceText.text = "Distance: %.2f %s".format(distance, unit)
+        holder.timeText.text = "Time: %.2f hrs".format(time)
         holder.visaRequired.text = "Visa Required: $visaRequired"
     }
 
@@ -28,6 +30,7 @@ class StopsAdapter(private val stops: List<Stop>, private val isKm: Boolean) : R
     class StopViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val stopText: TextView = view.findViewById(R.id.stopName)
         val distanceText: TextView = view.findViewById(R.id.stopDistance)
+        val timeText: TextView = view.findViewById(R.id.stopTime)
         val visaRequired: TextView = view.findViewById(R.id.visaRequired)
     }
 }
