@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-data class Stop(val stop: String, val distance: Double?)
+data class Stop(val stop: String, val distance: Double?, val visaRequired: Boolean = false)
 class MainActivity : AppCompatActivity() {
     private lateinit var stopTextView: TextView
     private lateinit var distanceTextView: TextView
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         totalDistance = calculateTotalDistance()
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = StopsAdapter(stops)
+        recyclerView.adapter = StopsAdapter(stops, isKm)
         updateUI()
 
         nextStopButton.setOnClickListener {
@@ -71,7 +71,9 @@ class MainActivity : AppCompatActivity() {
         return try {
             val inputStream = resources.openRawResource(R.raw.stops)
             val reader = BufferedReader(InputStreamReader(inputStream))
-            reader.readLines().map { Stop(it.split(",")[0].trim(), it.split(",")[1].trim().toDoubleOrNull()) }
+            reader.readLines().map { Stop(it.split(",")[0].trim(), it.split(",")[1].trim().toDoubleOrNull(),
+                it.split(",")[2].trim() == "YES"
+            ) }
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -89,6 +91,6 @@ class MainActivity : AppCompatActivity() {
         val unit = if (isKm) "km" else "miles"
         distanceTextView.text = "Remaining Distance: %.2f %s".format(displayDistance, unit)
         progressBar.progress = ((distanceCovered / totalDistance) * 100).toInt()
-        recyclerView.adapter = StopsAdapter(stops.subList(currentStopIndex + 1, stops.size))
+        recyclerView.adapter = StopsAdapter(stops.subList(currentStopIndex + 1, stops.size), isKm)
     }
 }

@@ -1,20 +1,20 @@
-JFK Airport, 940
-Heathrow Airport, 5567.8
-Charles de Gaulle, 342.5
-Frankfurt Airport, 469.3
-Dubai International, 4846.2
-Singapore Changi, 5842.1
-Hong Kong International, 2583.7
-Tokyo Narita, 2964.9
-Sydney Kingsford Smith, 791.4
-Los Angeles International, 5501.8
-Beijing Capital International, 2986.4
-Seoul Incheon International, 5963.5
-Toronto Pearson International, 2174.5
-Mexico City International, 1552.3
-São Paulo Guarulhos International, 6104.6
-Madrid Barajas Airport, 5818.2
-Istanbul Airport, 6858.0
-Doha Hamad International, 8312.7
-Munich Airport, 6023.1
-Amsterdam Schiphol Airport, 0.0
+JFK Airport, 940, YES
+Heathrow Airport, 5567.8, YES
+Charles de Gaulle, 342.5, NO
+Frankfurt Airport, 469.3, NO
+Dubai International, 4846.2, NO
+Singapore Changi, 5842.1, NO
+Hong Kong International, 2583.7, NO
+Tokyo Narita, 2964.9, YES
+Sydney Kingsford Smith, 791.4, YES
+Los Angeles International, 5501.8, NO
+Beijing Capital International, 2986.4, YES
+Seoul Incheon International, 5963.5, YES
+Toronto Pearson International, 2174.5, YES
+Mexico City International, 1552.3, YES
+São Paulo Guarulhos International, 6104.6, YES
+Madrid Barajas Airport, 5818.2, YES
+Istanbul Airport, 6858.0, NO
+Doha Hamad International, 8312.7, NO
+Munich Airport, 6023.1, YES
+Amsterdam Schiphol Airport, 0.0, NO
