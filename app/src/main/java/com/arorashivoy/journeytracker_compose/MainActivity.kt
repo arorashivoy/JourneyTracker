@@ -2,6 +2,7 @@ package com.arorashivoy.journeytracker_compose
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -188,9 +189,24 @@ fun JourneyTrackerScreen(appViewModel: StopViewModel) {
 
             Text(text = "Upcoming Stops:", style = MaterialTheme.typography.headlineSmall)
 
-            LazyColumn {
-                items(stopUIState.stops.subList(stopUIState.currentStopIndex + 1, stopUIState.stops.size)) { stop ->
-                    StopItem(stop = stop, isKm = stopUIState.isKm)
+            if (stopUIState.stops.size - stopUIState.currentStopIndex -1 > 3) {
+                LazyColumn {
+                    items(
+                        stopUIState.stops.subList(
+                            stopUIState.currentStopIndex + 1,
+                            stopUIState.stops.size
+                        )
+                    ) { stop ->
+                        StopItem(stop = stop, isKm = stopUIState.isKm)
+                    }
+                }
+            }
+            else {
+                Log.i("MainActivity", "SHIVOY: Non lazy text box")
+                Column {
+                    for (i in (stopUIState.currentStopIndex + 1) until stopUIState.stops.size) {
+                        StopItem(stop = stopUIState.stops[i], isKm = stopUIState.isKm)
+                    }
                 }
             }
         }
