@@ -2,7 +2,10 @@ package com.arorashivoy.jouneytracker_xml
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -23,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextStopButton: Button
     private lateinit var unitToggleButton: Button
     private lateinit var recyclerView: RecyclerView
+    private lateinit var staticListView: LinearLayout
 
     private var stops: List<Stop> = listOf()
     private var currentStopIndex = 0
@@ -49,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         nextStopButton = findViewById(R.id.nextStopButton)
         unitToggleButton = findViewById(R.id.unitToggleButton)
         recyclerView = findViewById(R.id.recyclerView)
+        staticListView = findViewById(R.id.staticListView)
 
         stops = loadStopsFromResource(resources)
         totalDistance = calculateTotalDistance()
@@ -109,6 +114,38 @@ class MainActivity : AppCompatActivity() {
         distanceTextView.text = "Remaining Distance: %.2f %s".format(displayDistance, unit)
         timeTextView.text = "Remaining Time: %.2f hrs".format(remainingTime)
         progressBar.progress = ((distanceCovered / totalDistance) * 100).toInt()
-        recyclerView.adapter = StopsAdapter(stops.subList(currentStopIndex + 1, stops.size), isKm)
+
+        val remainingStops = stops.subList(currentStopIndex + 1, stops.size)
+
+        if (remainingStops.size < 3) {
+            // Use Traditional List
+            recyclerView.visibility = View.GONE
+            staticListView.visibility = View.VISIBLE
+            staticListView.removeAllViews()
+
+            for (stop in remainingStops) {
+                val stopView = LayoutInflater.from(this).inflate(R.layout.stop_item, staticListView, false)
+
+                val stopNameTextView = stopView.findViewById<TextView>(R.id.stopName)
+                val stopDistanceTextView = stopView.findViewById<TextView>(R.id.stopDistance)
+                val stopTimeTextView = stopView.findViewById<TextView>(R.id.stopTime)
+                val visaRequiredTextView = stopView.findViewById<TextView>(R.id.visaRequired)
+
+                stopNameTextView.text = stop.stop
+                stopDistanceTextView.text = "Distance: %.2f %s".format(
+                    if (isKm) stop.distance ?: 0.0 else (stop.distance ?: 0.0) * 0.621371, unit
+                )
+                stopTimeTextView.text = "Time: %.2f hrs".format(stop.time ?: 0.0)
+                visaRequiredTextView.text = "Visa Required: ${if (stop.visaRequired) "Yes" else "No"}"
+
+                staticListView.addView(stopView)
+            }
+        } else {
+            // Use RecyclerView (Lazy List)
+            recyclerView.visibility = View.VISIBLE
+            staticListView.visibility = View.GONE
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = StopsAdapter(remainingStops, isKm)
+        }
     }
 }
