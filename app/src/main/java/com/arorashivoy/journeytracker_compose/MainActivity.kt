@@ -162,8 +162,10 @@ fun JourneyTrackerScreen(appViewModel: StopViewModel) {
             val remainingDistance = stopUIState.totalDistance - stopUIState.distanceCovered
             val remainingTime = stopUIState.totalTime - stopUIState.timeCovered
             val displayDistance = if (stopUIState.isKm) remainingDistance else remainingDistance * 0.621371
+            val displayDistanceCovered = if (stopUIState.isKm) stopUIState.distanceCovered else stopUIState.distanceCovered * 0.621371
             val unit = if (stopUIState.isKm) "km" else "miles"
 
+            Text(text = "Total Distance covered: %.2f %s".format(displayDistanceCovered, unit))
             Text(text = "Remaining Distance: %.2f %s".format(displayDistance, unit))
             Text(text = "Remaining Time: %.2f hrs".format(remainingTime))
 
