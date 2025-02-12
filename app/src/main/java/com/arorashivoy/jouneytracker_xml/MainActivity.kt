@@ -20,6 +20,7 @@ import java.io.InputStreamReader
 data class Stop(val stop: String, val distance: Double?, val time: Double?, val visaRequired: Boolean = false)
 class MainActivity : AppCompatActivity() {
     private lateinit var stopTextView: TextView
+    private lateinit var distanceCoveredTextView: TextView
     private lateinit var distanceTextView: TextView
     private lateinit var timeTextView: TextView
     private lateinit var progressBar: ProgressBar
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         stopTextView = findViewById(R.id.stopTextView)
+        distanceCoveredTextView = findViewById(R.id.distanceCoveredTextView)
         distanceTextView = findViewById(R.id.distanceTextView)
         timeTextView = findViewById(R.id.timeTextView)
         progressBar = findViewById(R.id.progressBar)
@@ -110,7 +112,9 @@ class MainActivity : AppCompatActivity() {
         val remainingTime = totalTime - timeCovered
         val remainingDistance = totalDistance - distanceCovered
         val displayDistance = if (isKm) remainingDistance else remainingDistance * 0.621371
+        val displayDistanceCovered = if (isKm) distanceCovered else distanceCovered * 0.621371
         val unit = if (isKm) "km" else "miles"
+        distanceCoveredTextView.text = "Total Distance Covered: %.2f %s".format(displayDistanceCovered, unit)
         distanceTextView.text = "Remaining Distance: %.2f %s".format(displayDistance, unit)
         timeTextView.text = "Remaining Time: %.2f hrs".format(remainingTime)
         progressBar.progress = ((distanceCovered / totalDistance) * 100).toInt()

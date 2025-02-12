@@ -25,6 +25,17 @@
             android:textSize="25sp"/>
 
         <TextView
+            android:id="@+id/distanceCoveredTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Distance Covered: "
+            android:textSize="16sp"/>
+
+        <TextView
             android:id="@+id/distanceTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
